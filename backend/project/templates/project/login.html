@@ -1,0 +1,24 @@
+<!--project/templates/project/login.html-->
+<!--Jericho Jacala jjacala@bu.edu-->
+<!--template to display form to log in as an existing user-->
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h2>Login</h2>
+
+<form method="POST">
+{% csrf_token %} <!--token to ensure that this came from a valid form-->
+{{form}}
+            <div>
+                <input type="submit" name="submit", value="Login">
+            </div>
+            
+            {% if request.GET.next %}
+            <input type="hidden" name="next", value="{{request.GET.next}}"> <!--designate to go to the url specified in request-->
+            {% else %}
+            <input type="hidden" name="next", value="{% url 'show_all_courses' %}"> <!--designates where to go if no next page is specified-->
+            {% endif %}
+</form>
+
+{% endblock %}

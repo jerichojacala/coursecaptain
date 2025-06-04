@@ -1,0 +1,62 @@
+<!--project/templates/project/show_professor.html-->
+<!--Jericho Jacala jjacala@bu.edu-->
+<!--professor detail page, lists the courses the professor teaches-->
+{% extends 'project/base.html' %}
+
+
+{% block content %}
+<main class="grid-container"></main> <!--here to add padding-->
+<!--display professor-->
+<professor class="featured">
+    <div>
+        <table>
+                <tr>
+                    <td>
+                        <h2>{{professor.first_name}} {{professor.last_name}}'s page of Courses</h2>
+                        <h3>Teaching at {{professor.college}}</h3>
+                        <h3>Average satisfaction (0-5):{{professor.get_professor_satisfaction}}</h3>
+                    </td>
+                    
+                </tr>
+                {% for c in professor.get_courses %}
+                <tr>
+                    <td>
+                        <h2><a href="{% url 'show_course_page' c.pk %}">{{c.subschool}} {{c.department}} {{c.number}}</a></h2>
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+    
+</professor>
+<!--loop through all reviews for the professor-->
+<div>
+    {% if professor.get_reviews %} 
+    <h2>All Reviews</h2>
+    <table>
+        {% for r in professor.get_reviews %} <!--loop through every review for the professor defined in the models file-->
+        <tr>
+            <td>
+        <h3><a href="{% url 'show_course_page' r.course.pk %}">{{r.course.subschool}} {{r.course.department}} {{r.course.number}}</a> at {{r.course.college}}</h3>        
+        <strong>{{r.title}} by {{r.student}}</strong>
+        <h4>Average weekly hours: {{r.difficulty}} Satisfaction: {{r.satisfaction}}</h4>
+        <h4>Grade: {{r.grade}} Taken on: {{r.semester}} {{r.year}}</h4>
+        <p>{{r.notes}}</p>
+        {% if request.user.is_authenticated and request.user == r.student.user %}
+        <h4><a href="{% url 'delete_review' r.pk %}">Delete review</a></h4>
+        {% endif %}
+
+        </td>
+
+        </tr>
+        
+        {% endfor %}
+        
+    </table>
+    
+    {% else %}
+    <h2>No Reviews</h2> <!--case for no reviews-->
+    {% endif %}
+</div>
+</main>
+{% endblock %}
