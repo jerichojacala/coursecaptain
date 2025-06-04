@@ -21,22 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("quotes.urls")), ## we create the URL quotes/, 
-                                     ## and associate it with URLs in another file
-    path("quote/", include("quotes.urls")),
-    path("show_all/", include("quotes.urls")),
-    path("about/", include("quotes.urls")),
-    #path("formdata/", include("formdata.urls")),
-    #path("submit/", include("formdata.urls")),
-    path("restaurant/", include("restaurant.urls")),
-    path("restaurant/main/", include("restaurant.urls")),
-    path("restaurant/order/", include("restaurant.urls")),
-    path("restaurant/confirmation/", include("restaurant.urls")),
-    #path("blog/", include("blog.urls")),
-    path("mini_fb/", include("mini_fb.urls")),
-    #path("marathon_analytics/", include("marathon_analytics.urls")),
-    path("voter_analytics/", include("voter_analytics.urls")),
-    path("project/", include("project.urls")),
+    path("", include("project.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT) #define path to static directory
