@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'marathon_analytics',
     'voter_analytics',
     'project',
+    'rest_framework', #related to setting up django api to communicate with react
+    'corsheaders', #related to setting up django api to communicate with react
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware', #csrf token middleware
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # allow Next.js dev server
+    "http://192.168.1.xx:3000",
 ]
 
 ROOT_URLCONF = 'cs412.urls'

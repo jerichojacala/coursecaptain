@@ -11,8 +11,28 @@ from django.contrib.auth import login
 from typing import Any
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import *
 
 # Create your views here.
+
+#API classes
+
+class CourseAPIView(APIView):
+    def get(self, request):
+        courses = Course.objects.all()
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data)
+    
+class ProfessorAPIView(APIView):
+    def get(self, request):
+        professors = Professor.objects.all()
+        serializer = ProfessorSerializer(professors, many = True)
+        return Response(serializer.data)
+    
+#Legacy classes
+
 class ShowAllCoursesView(ListView):
     '''the view to show all Courses'''
     model = Course #the model to display
