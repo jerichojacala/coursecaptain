@@ -5,6 +5,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator #impose limits on the satisfaction score (0-5)
 
+
+class College(models.Model):
+    '''encapsulate the idea of a college'''
+    name = models.TextField(blank=False)
+
+    def __str__(self):
+        '''Return a string representation of this object'''
+        return f'{self.name}'
+
 # Create your models here.
 class Student(models.Model):
     '''encapsulate the idea of a student'''
@@ -13,7 +22,8 @@ class Student(models.Model):
     email = models.TextField(blank=False)
     image_file = models.ImageField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    college = models.TextField(blank=False)
+    #college = models.CharField(max_length=255)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
 
     def __str__(self):
         '''Return a string representation of this object'''
@@ -50,7 +60,7 @@ class Course(models.Model):
     number = models.IntegerField(blank=False)
     credits = models.IntegerField(blank=False)
     subschool = models.TextField(blank=False)
-    college = models.TextField(blank=False)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
     def __str__(self):
         '''Return a string representation of this object'''
         return f'{self.subschool} {self.department} {self.number} by {self.professor}'
@@ -102,7 +112,7 @@ class Professor(models.Model):
     '''encapsulate the idea of a professor'''
     first_name = models.TextField(blank=False)
     last_name = models.TextField(blank=False)
-    college = models.TextField(blank=False)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
     def __str__(self):
         '''Return a string representation of this object'''
         return f'{self.first_name} {self.last_name}'

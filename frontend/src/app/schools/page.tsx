@@ -38,6 +38,7 @@ export default function Page() {
     <>
       <Banner title="Courses" />
       <main className="p-8">
+        <h1 className="text-3xl font-bold mb-4">Available Courses</h1>
         {courses.length === 0 ? (
           <p>No courses available.</p>
         ) : (

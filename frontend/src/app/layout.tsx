@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from '@/components/Navbar';
-import Banner from '@/components/Banner';
 
 const inter = Inter({ 
   subsets: ['latin'] 
@@ -35,7 +34,6 @@ export default function RootLayout({
       >
         <Navbar />
         <br /> <br /> <br />
-        <Banner />
         {children}
       </body>
     </html>

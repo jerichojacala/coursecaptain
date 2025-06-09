@@ -1,4 +1,9 @@
-export default function Banner() {
+// components/Banner.tsx
+type BannerProps = {
+  title: string;
+};
+
+export default function Banner({ title }: BannerProps) {
   return (
     <div className="relative h-100 w-full">
       {/* Background image */}
@@ -10,7 +15,7 @@ export default function Banner() {
 
       {/* Overlay text */}
       <div className="relative z-10 flex items-center justify-center h-full bg-black/30">
-        <h1 className="text-white text-4xl font-bold">Show All Courses</h1>
+        <h1 className="text-white text-6xl font-bold">{title}</h1>
       </div>
     </div>
   );

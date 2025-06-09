@@ -37,13 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quotes', #new addition
-    #'formdata', #new app!!!
-    'restaurant',
-    'blog',
-    'mini_fb',
-    'marathon_analytics',
-    'voter_analytics',
     'project',
     'rest_framework', #related to setting up django api to communicate with react
     'corsheaders', #related to setting up django api to communicate with react
