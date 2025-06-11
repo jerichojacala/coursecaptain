@@ -13,7 +13,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
 from .serializers import *
+from django.db.models import Q
 
 # Create your views here.
 
@@ -30,6 +32,31 @@ class ProfessorAPIView(APIView):
         professors = Professor.objects.all()
         serializer = ProfessorSerializer(professors, many = True)
         return Response(serializer.data)
+    
+class CollegeAPIView(APIView):
+    def get(self, request):
+        colleges = College.objects.all()
+        serializer = CollegeSerializer(colleges, many=True)
+        return Response(serializer.data)
+    
+class CollegeList(generics.ListAPIView):
+    serializer_class = CollegeSerializer
+    
+    def get_queryset(self):
+        queryset = College.objects.all()
+        search_term = self.request.query_params.get('search', '').strip()
+        search_field = self.request.query_params.get('field', 'all')
+        
+        if search_term:
+            if search_field == 'all':
+                queryset = queryset.filter(
+                    Q(name__icontains=search_term)
+                )
+            elif search_field == 'name':
+                queryset = queryset.filter(
+                    Q(name__icontains=search_term)
+                )
+        return queryset
     
 #Legacy classes
 

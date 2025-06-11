@@ -30,4 +30,5 @@ urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name="logout"), 
     path('courses/', views.CourseAPIView.as_view()),
     path('professors/', views.ProfessorAPIView.as_view()),
+    path('colleges/', views.CollegeList.as_view()),
 ]
