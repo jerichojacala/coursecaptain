@@ -7,7 +7,9 @@ from .models import *
 # Register your models here.
 
 # Register your models here.
-admin.site.register(College)
+admin.site.register(School)
+admin.site.register(Subschool)
+admin.site.register(Phone)
 admin.site.register(Student)
 admin.site.register(Review)
 admin.site.register(Professor)

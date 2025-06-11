@@ -44,11 +44,11 @@ class CreateStudentForm(forms.ModelForm):
     class Meta:
         '''Associate this HTML form with the Student model'''
         model = Student #the model we are looking to create
-        fields = ['first_name','last_name','email','image_file','college'] #the fields the form must specify
+        fields = ['first_name','last_name','email','image_file','school'] #the fields the form must specify
 
 class UpdateStudentForm(forms.ModelForm):
     '''a form to update a Student'''
     class Meta:
         '''Associate with the Student model'''
         model = Student
-        fields = ['first_name','last_name','email','image_file','college'] #the fields the form must specify
+        fields = ['first_name','last_name','email','image_file','school'] #the fields the form must specify

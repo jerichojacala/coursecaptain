@@ -4,17 +4,32 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator #impose limits on the satisfaction score (0-5)
+from django.core.validators import RegexValidator
 
-
-class College(models.Model):
-    '''encapsulate the idea of a college'''
+class School(models.Model):
+    '''encapsulate the idea of a school'''
     name = models.TextField(blank=False)
+    municipality = models.TextField(blank=False)
+    subdivision = models.TextField(blank=True)
+    country = models.TextField(blank=False)
+    url = models.URLField(blank=True)
 
     def __str__(self):
         '''Return a string representation of this object'''
         return f'{self.name}'
+    
+class Subschool(models.Model):
+    '''encapsulate the idea of a subschool, such as medical or business school'''
+    name = models.TextField(blank=False)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    url = models.URLField(blank=True)
 
-# Create your models here.
+    def __str__(self):
+        '''Return a string representation of this object'''
+        return f'{self.school} {self.name}'
+
+# Legacy models
+
 class Student(models.Model):
     '''encapsulate the idea of a student'''
     first_name = models.TextField(blank=False)
@@ -22,8 +37,7 @@ class Student(models.Model):
     email = models.TextField(blank=False)
     image_file = models.ImageField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #college = models.CharField(max_length=255)
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
 
     def __str__(self):
         '''Return a string representation of this object'''
@@ -59,8 +73,8 @@ class Course(models.Model):
     department = models.TextField(blank=False)
     number = models.IntegerField(blank=False)
     credits = models.IntegerField(blank=False)
-    subschool = models.TextField(blank=False)
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    subschool = models.TextField(blank=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, blank=True)
     def __str__(self):
         '''Return a string representation of this object'''
         return f'{self.subschool} {self.department} {self.number} by {self.professor}'
@@ -112,7 +126,8 @@ class Professor(models.Model):
     '''encapsulate the idea of a professor'''
     first_name = models.TextField(blank=False)
     last_name = models.TextField(blank=False)
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    url = models.URLField(blank=True)
     def __str__(self):
         '''Return a string representation of this object'''
         return f'{self.first_name} {self.last_name}'
@@ -186,9 +201,94 @@ class Schedule(models.Model):
 class Registration(models.Model):
     '''encapsulate the idea of a course in a schedule-models many-to-many relationship, much like friend from mini_fb'''
     course  = models.ForeignKey("Course", on_delete=models.CASCADE)
-    schedule  = models.ForeignKey("Schedule", on_delete=models.CASCADE, related_name="profile2")
+    schedule  = models.ForeignKey("Schedule", on_delete=models.CASCADE)
 
     def __str__(self):
         '''Return the string representation of the registration'''
         return f'{self.course} in {self.schedule}'
+
+class Phone(models.Model):
+    """Model representing phone numbers associated with students"""
     
+    # Phone type constants - using class variables for better organization
+    class PhoneTypes(models.IntegerChoices):
+        MOBILE = 0
+        HOME = 1
+        WORK = 2
+        FAX = 3
+        OTHER = 4
+    
+    # Phone verification status constants
+    class VerificationStatus(models.IntegerChoices):
+        UNVERIFIED = 0
+        PENDING = 1
+        VERIFIED = 2
+    
+    # Link to Django's built-in User model (or your custom User model)
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+    )
+    
+    # Phone number field with international format validation
+    number = models.CharField(
+        max_length=20,
+        validators=[
+            RegexValidator(
+                regex=r'^\+[1-9]\d{1,14}$',  # E.164 format
+                message="Phone number must be in E.164 format (+1234567890)"
+            )
+        ],
+    )
+    
+    # Phone type with predefined choices
+    type = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(4)],
+        default=PhoneTypes.MOBILE,
+    )
+    
+    # Verification status tracking
+    verification_status = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(2)],
+        default=VerificationStatus.UNVERIFIED,
+    )
+    
+    # Verification metadata
+    verification_code = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+    )
+    verification_sent_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+    
+    # Primary number flag with index for faster lookups
+    is_primary = models.BooleanField(
+        default=False,
+        db_index=True
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # Ensure a user can't have duplicate phone numbers
+        unique_together = ('student', 'number')
+        # Default ordering by primary status then creation time
+        ordering = ['-is_primary', '-created_at']
+    
+    def __str__(self):
+        return f"{self.number}"
+    
+    def save(self, *args, **kwargs):
+        """Ensure only one primary number per student"""
+        if self.is_primary:
+            # Remove primary status from other numbers for this student
+            Phone.objects.filter(
+                student=self.student,
+                is_primary=True
+            ).exclude(pk=self.pk).update(is_primary=False)
+        super().save(*args, **kwargs)

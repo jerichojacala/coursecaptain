@@ -15,7 +15,7 @@ export default async function DetailView<T>({
   renderItem,
 }: DetailViewProps<T>) {
   const res = await fetch(`${endpoint}/${id}/`, { cache: 'no-store' });
-
+  // Handle errors if no results found not found
   if (!res.ok) return notFound();
 
   const data: T = await res.json();
