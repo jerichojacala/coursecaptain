@@ -6,7 +6,9 @@ import SearchGrid from '@/components/SearchGrid';
 type School = {
   id: number;
   name: string;
-  location: string;
+  municipality: string;
+  subdivision: string;
+  country: string;
 };
 
 export default function SchoolSearchPage() {
@@ -18,10 +20,9 @@ export default function SchoolSearchPage() {
       renderItem={(school) => (
         <Link
           href={`/schools/${school.id}`}
-          className="border p-6 rounded-lg shadow hover:shadow-md transition"
         >
           <h2 className="text-xl font-bold mb-2">{school.name}</h2>
-          <p className="text-gray-600">{school.location}</p>
+          <p className="text-gray-600">{school.municipality}, {school.subdivision} {school.country}</p>
         </Link>
       )}
     />

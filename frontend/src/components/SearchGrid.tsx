@@ -63,11 +63,12 @@ export default function SearchGrid<T>({
           </p>
         ) : null}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {results.map((item, idx) => (
-            <div key={idx}>{renderItem(item)}</div>
-          ))}
-        </div>
+        {results.map((item, idx) => (
+          <div key={idx} className="border p-6 rounded-lg shadow hover:shadow-md transition">
+            {renderItem(item)}
+          </div>
+        ))}
+
       </div>
     </>
   );

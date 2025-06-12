@@ -45,17 +45,14 @@ class SchoolList(ListAPIView):
     def get_queryset(self):
         queryset = School.objects.all()
         search_term = self.request.query_params.get('search', '').strip()
-        search_field = self.request.query_params.get('field', 'all')
+        # search_field = self.request.query_params.get('field', 'all')
         
-        if search_term:
-            if search_field == 'all':
-                queryset = queryset.filter(
-                    Q(name__icontains=search_term)
-                )
-            elif search_field == 'name':
-                queryset = queryset.filter(
-                    Q(name__icontains=search_term)
-                )
+        queryset = queryset.filter(
+            Q(name__icontains=search_term) |
+            Q(municipality__icontains=search_term) |
+            Q(subdivision__icontains=search_term) |
+            Q(country__icontains=search_term)
+        )
         return queryset
     
 class SchoolDetail(RetrieveAPIView):
