@@ -21,11 +21,24 @@ from django.db.models import Q
 
 #API classes
 
-class CourseAPIView(APIView):
-    def get(self, request):
-        courses = Course.objects.all()
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
+class CourseList(ListAPIView):
+    serializer_class = CourseSerializer
+    
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        search_term = self.request.query_params.get('search', '').strip()
+        words = search_term.split()
+        # search_field = self.request.query_params.get('field', 'all')
+        
+        for word in words:
+            queryset = queryset.filter(
+                (Q(department__icontains=word) |
+                Q(number__icontains=word)) |
+                Q(professor__last_name__icontains=word) |
+                Q(professor__first_name__icontains=word)
+            )
+
+        return queryset
     
 class ProfessorAPIView(APIView):
     def get(self, request):

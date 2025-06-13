@@ -28,7 +28,7 @@ urlpatterns = [
     #path(r'schedule/<int:pk>/course_suggestions',views.ShowRegistrationsView.as_view(),name="course_suggestions"),  
     #path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name="login"),
     #path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name="logout"), 
-    path('courses/', views.CourseAPIView.as_view()),
+    path('courses/', views.CourseList.as_view()),
     path('professors/', views.ProfessorAPIView.as_view()),
     path('schools/', views.SchoolList.as_view()),
     path('schools/<int:pk>/', views.SchoolDetail.as_view()),

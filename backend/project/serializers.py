@@ -11,13 +11,14 @@ class ProfessorSerializer(serializers.ModelSerializer):
         model = Professor
         fields = '__all__'
 
-class CourseSerializer(serializers.ModelSerializer):
-    professor = ProfessorSerializer()
-    class Meta:
-        model = Course
-        fields = '__all__'
-
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
+        fields = '__all__'
+
+class CourseSerializer(serializers.ModelSerializer):
+    professor = ProfessorSerializer()
+    school = SchoolSerializer()
+    class Meta:
+        model = Course
         fields = '__all__'

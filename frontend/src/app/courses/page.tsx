@@ -14,7 +14,7 @@ type Course = {
   number: number;
   credits: number;
   subschool: string;
-  school: string;
+  school: School;
 }
 
 type Professor = {
@@ -24,19 +24,26 @@ type Professor = {
   school: string;
 }
 
+type School = {
+  id: number;
+  name: string;
+  municipality: string;
+  subdivision: string;
+  country: string;
+};
+
 export default function CourseSearchPage() {
-    return (
+  return (
     <SearchGrid<Course>
       title="Courses"
       searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/courses/`}
-      placeholder="Search courses by name, school, etc..."
+      placeholder="Search courses by name, professor, etc..."
       renderItem={(course) => (
         <Link
           href={`/courses/${course.id}`}
-          className="border p-6 rounded-lg shadow hover:shadow-md transition"
         >
           <h2 className="text-xl font-bold mb-2">{course.department} {course.number}</h2>
-          <p className="text-gray-600">{course.school}</p>
+          <p className="text-gray-600">{course.professor.first_name} {course.professor.last_name}, {course.school.name}</p>
         </Link>
       )}
     />

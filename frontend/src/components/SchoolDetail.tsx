@@ -12,7 +12,7 @@ type School = {
   url: string;
 };
 
-export default function DetailView({ id }: { id: string }) {
+export default function SchoolDetailView({ id }: { id: string }) {
   const [data, setData] = useState<School | null>(null);
   const [error, setError] = useState(false);
 
@@ -43,7 +43,7 @@ export default function DetailView({ id }: { id: string }) {
   }
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <div><p className='text-center'>Loading...</p></div>;
   }
 
   return (

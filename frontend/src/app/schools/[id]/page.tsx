@@ -1,5 +1,5 @@
-import DetailView from '@/components/Detail';
+import SchoolDetailView from '@/components/SchoolDetail';
 
 export default function SchoolPage({ params }: { params: { id: string } }) {
-  return <DetailView id={params.id} />;
+  return <SchoolDetailView id={params.id} />;
 }
