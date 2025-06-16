@@ -32,4 +32,5 @@ urlpatterns = [
     path('professors/', views.ProfessorAPIView.as_view()),
     path('schools/', views.SchoolList.as_view()),
     path('schools/<int:pk>/', views.SchoolDetail.as_view()),
+    path('courses/<int:pk>/', views.CourseDetail.as_view()),
 ]

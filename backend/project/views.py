@@ -72,3 +72,8 @@ class SchoolDetail(RetrieveAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
     lookup_field = 'pk'  # Uses primary key (id)
+
+class CourseDetail(RetrieveAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    lookup_field = 'pk'

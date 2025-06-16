@@ -22,6 +22,7 @@ class Subschool(models.Model):
     '''encapsulate the idea of a subschool, such as medical or business school'''
     name = models.TextField(blank=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
+    abbreviation = models.CharField(max_length=5, blank=True)
     url = models.URLField(blank=True)
 
     def __str__(self):
@@ -37,7 +38,7 @@ class Student(models.Model):
     email = models.TextField(blank=False)
     image_file = models.ImageField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         '''Return a string representation of this object'''
@@ -73,7 +74,7 @@ class Course(models.Model):
     department = models.TextField(blank=False)
     number = models.IntegerField(blank=False)
     credits = models.IntegerField(blank=False)
-    subschool = models.TextField(blank=True)
+    subschool = models.ForeignKey(Subschool, on_delete=models.CASCADE, blank=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE, blank=True)
     def __str__(self):
         '''Return a string representation of this object'''
