@@ -14,7 +14,7 @@ export default function ProfessorSearchPage() {
     return (
     <SearchGrid<Professor>
       title="Professors"
-      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/professors/`}
+      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/professors/`}
       placeholder="Search professors by name, school, etc..."
       renderItem={(professor) => (
         <Link

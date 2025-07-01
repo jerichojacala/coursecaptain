@@ -164,7 +164,9 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "auth/password/reset-password-confirmation/?uid={uid}&token={token}",
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
-    "SERIALIZERS": {},
+    "SERIALIZERS": {
+        "current_user": "cs412.serializers.CustomUserSerializer",
+    },
     "LOGIN_FIELD": "email",
 }
 

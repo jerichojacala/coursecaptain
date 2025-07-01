@@ -15,7 +15,7 @@ export default function SchoolSearchPage() {
   return (
     <SearchGrid<School>
       title="Schools"
-      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/schools/`}
+      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/schools/`}
       placeholder="Search schools by name, location, etc..."
       renderItem={(school) => (
         <Link

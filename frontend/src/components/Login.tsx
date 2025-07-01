@@ -32,9 +32,8 @@ const Login = () => {
 
         router.push("courses");
       })
-      .catch(async (err) => {
-        const errorData = await err.json();
-        setError("root", { type: "manual", message: errorData.detail || "Login failed" });
+      .catch((err) => {
+        setError("root", { type: "manual", message: err.json.detail });
       });
   };
 

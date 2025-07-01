@@ -3,7 +3,7 @@ import wretch from "wretch";
 import Cookies from "js-cookie";
 
 // Base API setup for making HTTP requests
-const api = wretch(`${process.env.HOST_URL}`).accept("application/json");
+const api = wretch(`${process.env.NEXT_PUBLIC_API_URL}`).accept("application/json");
 
 /**
  * Stores a token in cookies.
@@ -36,7 +36,7 @@ const register = (email: string, username: string, password: string) => {
 };
 
 const login = (email: string, password: string) => {
-  return api.post({ email, password }, "/auth/jwt/create");
+  return api.post({ username: email, password }, "/auth/jwt/create/");
 };
 
 const logout = () => {
@@ -46,7 +46,7 @@ const logout = () => {
 
 const handleJWTRefresh = () => {
   const refreshToken = getToken("refresh");
-  return api.post({ refresh: refreshToken }, "/auth/jwt/refresh");
+  return api.post({ refresh: refreshToken }, "/auth/jwt/refresh/");
 };
 
 const resetPassword = (email: string) => {

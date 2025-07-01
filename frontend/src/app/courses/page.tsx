@@ -36,7 +36,7 @@ export default function CourseSearchPage() {
   return (
     <SearchGrid<Course>
       title="Courses"
-      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/courses/`}
+      searchEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/courses/`}
       placeholder="Search courses by name, professor, etc..."
       renderItem={(course) => (
         <Link
