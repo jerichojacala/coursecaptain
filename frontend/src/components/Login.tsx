@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { mutate } from "swr";
 
 type FormData = {
   email: string;
@@ -26,11 +27,11 @@ const Login = () => {
 
   const onSubmit = (data: FormData) => {
     login(data.email, data.password)
-      .json((json) => {
+      .json(async (json) => {
         storeToken(json.access, "access");
         storeToken(json.refresh, "refresh");
-
-        router.push("courses");
+        await mutate("/auth/users/me/"); //user data revalidation
+        router.push("/courses");
       })
       .catch((err) => {
         setError("root", { type: "manual", message: err.json.detail });
