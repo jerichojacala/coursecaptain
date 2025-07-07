@@ -4,7 +4,7 @@ import wretch, { Wretch, WretchError } from "wretch";
 import { AuthActions } from "@/app/auth/utils";
 
 // Extract necessary functions from the AuthActions utility.
-const { handleJWTRefresh, storeToken, getToken } = AuthActions();
+const { handleJWTRefresh, storeToken, getToken, removeTokens } = AuthActions();
 
 const api = () => {
   const access = getToken("access");
@@ -14,6 +14,11 @@ const api = () => {
       .auth(`Bearer ${access}`)
       // Catch 401 errors to refresh the token and retry the request.
       .catcher(401, async (error: WretchError, request: Wretch) => {
+        const refreshToken = AuthActions().getToken("refresh");
+        if (!refreshToken){
+          AuthActions().removeTokens();
+          throw new Error("User is not logged in");
+        }
         try {
           // Attempt to refresh the JWT token.
           const { access } = (await handleJWTRefresh().json()) as {
@@ -32,7 +37,8 @@ const api = () => {
             })
             .json();
         } catch (err) {
-          window.location.replace("/");
+          removeTokens();
+          throw new Error("Token refresh failed");
         }
       })
   );

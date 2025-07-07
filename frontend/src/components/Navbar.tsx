@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { fetcher } from "@/app/fetcher";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
@@ -15,11 +15,12 @@ export default function Navbar() {
     logout()
       .res(() => {
         removeTokens();
-
+        mutate("/auth/users/me/", null, false);
         router.push("/");
       })
       .catch(() => {
         removeTokens();
+        mutate("/auth/users/me/", null, false);
         router.push("/");
       });
   };
