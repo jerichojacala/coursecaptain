@@ -35,8 +35,8 @@ const register = (email: string, username: string, password: string) => {
   return api.post({ email, username, password }, "/auth/users/");
 };
 
-const login = (email: string, password: string) => {
-  return api.post({ username: email, password }, "/auth/jwt/create/");
+const login = (username: string, password: string) => {
+  return api.post({ username: username, password }, "/auth/jwt/create/");
 };
 
 const logout = () => {

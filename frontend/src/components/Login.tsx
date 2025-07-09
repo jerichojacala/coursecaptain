@@ -9,7 +9,7 @@ import Link from "next/link";
 import { mutate } from "swr";
 
 type FormData = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -26,12 +26,12 @@ const Login = () => {
   const { login, storeToken } = AuthActions();
 
   const onSubmit = (data: FormData) => {
-    login(data.email, data.password)
+    login(data.username, data.password)
       .json(async (json) => {
         storeToken(json.access, "access");
         storeToken(json.refresh, "refresh");
         await mutate("/auth/users/me/"); //user data revalidation
-        router.push("/courses");
+        router.push("/");
       })
       .catch((err) => {
         setError("root", { type: "manual", message: err.json.detail });
@@ -39,27 +39,25 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-black/30 text-black">
+    <div className="flex items-center justify-center text-black">
       <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg w-1/3">
         <h3 className="text-2xl text-gray font-semibold">Login to your account</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
           <div>
-            <label className="block" htmlFor="email">
-              Email
+            <label className="block" htmlFor="username">
             </label>
             <input
               type="text"
-              placeholder="Email"
-              {...register("email", { required: true })}
+              placeholder="Username"
+              {...register("username", { required: true })}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
-            {errors.email && (
-              <span className="text-xs text-red-600">Email is required</span>
+            {errors.username && (
+              <span className="text-xs text-red-600">Username is required</span>
             )}
           </div>
           <div className="mt-4">
             <label className="block" htmlFor="password">
-              Password
             </label>
             <input
               type="password"

@@ -6,11 +6,6 @@
 from rest_framework import serializers
 from .models import *
 
-class ProfessorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Professor
-        fields = '__all__'
-
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
@@ -19,6 +14,24 @@ class SchoolSerializer(serializers.ModelSerializer):
 class SubschoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subschool
+        fields = '__all__'
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['id', 'first_name', 'last_name']
+
+class ReviewSerializer(serializers.ModelSerializer):
+    student = StudentSerializer()
+    class Meta:
+        model = Review
+        exclude = ['course']
+
+class ProfessorSerializer(serializers.ModelSerializer):
+    school = SchoolSerializer()
+    class Meta:
+        model = Professor
         fields = '__all__'
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -43,14 +56,3 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_course_satisfaction(self, obj):
         course_satisfaction = obj.get_course_satisfaction()
         return course_satisfaction
-
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = ['id', 'first_name', 'last_name']
-
-class ReviewSerializer(serializers.ModelSerializer):
-    student = StudentSerializer()
-    class Meta:
-        model = Review
-        exclude = ['course']

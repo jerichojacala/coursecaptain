@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Banner from '@/components/Banner';
+import Login from "@/components/Login";
 
 export default function Home() {
   return (
     <>
-    <Banner title = "Welcome to CourseCaptain!" />
     <div>
-      <main>
+      <main className="">
+        <Login />
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a

@@ -7,7 +7,15 @@ type Professor = {
   id: number;
   first_name: string;
   last_name: string;
-  school: string;
+  school: School;
+};
+
+type School = {
+  id: number;
+  name: string;
+  municipality: string;
+  subdivision: string;
+  country: string;
 };
 
 export default function ProfessorSearchPage() {
@@ -19,10 +27,9 @@ export default function ProfessorSearchPage() {
       renderItem={(professor) => (
         <Link
           href={`/professors/${professor.id}`}
-          className="border p-6 rounded-lg shadow hover:shadow-md transition"
         >
           <h2 className="text-xl font-bold mb-2">{professor.first_name} {professor.last_name}</h2>
-          <p className="text-gray-600">{professor.school}</p>
+          <p className="text-gray-600">{professor.school.name}</p>
         </Link>
       )}
     />

@@ -45,7 +45,10 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <Link href="/login">Login</Link>
+            <>
+              <Link href="/auth/login">Login</Link>
+              <Link href="/auth/register">Register</Link>
+            </>
           )}
         </div>
       </div>
