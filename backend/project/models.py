@@ -37,7 +37,7 @@ class Student(models.Model):
     last_name = models.TextField(blank=False)
     email = models.TextField(blank=False)
     image_file = models.ImageField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_profile")
     school = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

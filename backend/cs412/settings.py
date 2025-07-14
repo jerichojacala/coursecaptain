@@ -165,6 +165,7 @@ DJOSER = {
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
     "SERIALIZERS": {
+        "user": "cs412.serializers.CustomUserSerializer",
         "current_user": "cs412.serializers.CustomUserSerializer",
     },
     "LOGIN_FIELD": "email",
