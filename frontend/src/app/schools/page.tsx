@@ -2,14 +2,7 @@
 
 import Link from 'next/link';
 import SearchGrid from '@/components/SearchGrid';
-
-type School = {
-  id: number;
-  name: string;
-  municipality: string;
-  subdivision: string;
-  country: string;
-};
+import { School } from '@/models/schoolModel';
 
 export default function SchoolSearchPage() {
   return (

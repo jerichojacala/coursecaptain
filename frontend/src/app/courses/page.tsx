@@ -4,33 +4,7 @@
 
 import Link from 'next/link';
 import SearchGrid from '@/components/SearchGrid';
-
-//define types
-
-type Course = {
-  id: number;
-  professor: Professor;
-  department: string;
-  number: number;
-  credits: number;
-  subschool: string;
-  school: School;
-}
-
-type Professor = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  school: string;
-}
-
-type School = {
-  id: number;
-  name: string;
-  municipality: string;
-  subdivision: string;
-  country: string;
-};
+import { Course } from '@/models/courseModel';
 
 export default function CourseSearchPage() {
   return (

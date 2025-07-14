@@ -2,21 +2,7 @@
 
 import Link from 'next/link';
 import SearchGrid from '@/components/SearchGrid';
-
-type Professor = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  school: School;
-};
-
-type School = {
-  id: number;
-  name: string;
-  municipality: string;
-  subdivision: string;
-  country: string;
-};
+import { Professor } from '@/models/professorModel';
 
 export default function ProfessorSearchPage() {
     return (
