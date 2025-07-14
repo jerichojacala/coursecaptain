@@ -8,7 +8,7 @@ import SearchGrid from '@/components/SearchGrid';
 //define types
 
 type Course = {
-  id: number; // Django will auto-generate this
+  id: number;
   professor: Professor;
   department: string;
   number: number;
