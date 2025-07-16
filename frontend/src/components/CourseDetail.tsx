@@ -3,62 +3,10 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Course } from '@/models/courseModel';
+import {Subschool} from '@/models/subschoolModel';
+import {Review} from '@/models/reviewModel';
 
-type School = {
-  id: number;
-  name: string;
-  municipality: string;
-  subdivision: string;
-  country: string;
-  url: string;
-};
-
-type Subschool = {
-    id: number;
-    school: School;
-    name: string;
-    abbreviation: string;
-    url: string;
-}
-
-type Professor = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  school: string;
-};
-
-type Review = {
-  id: number;
-  student: Student;
-  difficulty: number;
-  satisfaction: number;
-  grade: string;
-  semester: string;
-  year: number;
-  notes: string;
-  timestamp: string;
-  title: string;
-}
-
-type Course = {
-  id: number;
-  professor: Professor;
-  school: School;
-  subschool: Subschool;
-  reviews: Review[];
-  course_load: number;
-  course_satisfaction: number;
-  department: string;
-  number: string;
-  credits: number;
-};
-
-type Student = {
-  id: string;
-  first_name: string;
-  last_name: string;
-}
 
 export default function CourseDetailView({ id }: { id: string }) {
   const [data, setData] = useState<Course | null>(null);
@@ -67,7 +15,7 @@ export default function CourseDetailView({ id }: { id: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${id}/`, { 
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${id}/`, { 
           cache: 'no-store' 
         });
         

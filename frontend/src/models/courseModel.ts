@@ -2,6 +2,8 @@
 
 import { Professor } from "@/models/professorModel";
 import { School } from "@/models/schoolModel";
+import {Subschool} from '@/models/subschoolModel';
+import {Review} from '@/models/reviewModel';
 
 export type Course = {
   id: number;
@@ -9,6 +11,9 @@ export type Course = {
   department: string;
   number: number;
   credits: number;
-  subschool: string;
+  subschool: Subschool;
   school: School;
+  course_load: number;
+  course_satisfaction: number;
+  reviews: Review[];
 }

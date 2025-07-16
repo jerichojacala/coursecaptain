@@ -22,6 +22,16 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['id', 'first_name', 'last_name']
 
+class ProfileSerializer(serializers.ModelSerializer):
+    schedules = serializers.SerializerMethodField()
+    class Meta:
+        model = Student
+        fields = ['id', 'first_name', 'last_name', 'schedules']
+
+    def get_schedules(self, obj):
+        schedules_qs = obj.get_schedules()
+        return ScheduleSerializer(schedules_qs, many=True).data
+
 class ReviewSerializer(serializers.ModelSerializer):
     student = StudentSerializer()
     class Meta:
@@ -56,3 +66,20 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_course_satisfaction(self, obj):
         course_satisfaction = obj.get_course_satisfaction()
         return course_satisfaction
+    
+class RegistrationSerializer(serializers.ModelSerializer):
+    course = CourseSerializer()
+    class Meta:
+        model = Registration
+        fields = ['course']
+    
+class ScheduleSerializer(serializers.ModelSerializer):
+    registrations = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Schedule
+        fields = '__all__'
+
+    def get_registrations(self, obj):
+        registrations_qs = obj.get_registrations()
+        return registrations_qs

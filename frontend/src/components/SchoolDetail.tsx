@@ -19,7 +19,7 @@ export default function SchoolDetailView({ id }: { id: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/`, { 
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schools/${id}/`, { 
           cache: 'no-store' 
         });
         
