@@ -65,6 +65,35 @@ const resetPasswordConfirm = (
   );
 };
 
+/**
+ * Registers the currently logged-in student for a course.
+ * @param courseId - The ID of the course to register for.
+ * @returns Response JSON or throws an error.
+ */
+export async function createSchedule(title = "My Schedule") {
+  const accessToken = getToken("access");
+
+  if (!accessToken) {
+    throw new Error("User not authenticated. No access token found.");
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules/create/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ title: "My Schedule" }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData?.detail || "Schedule creation failed");
+  }
+
+  return res.json();
+}
+
 export const AuthActions = () => {
   return {
     login,
@@ -76,5 +105,6 @@ export const AuthActions = () => {
     getToken,
     logout,
     removeTokens,
+    createSchedule,
   };
 };

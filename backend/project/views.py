@@ -16,6 +16,8 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from .serializers import *
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -81,6 +83,11 @@ class CourseDetail(RetrieveAPIView):
 class ScheduleCreateView(CreateAPIView):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return {'request': self.request}
+    
+    def perform_create(self, serializer):
+        student = get_object_or_404(Student, user=self.request.user)
+        serializer.save(student=student)

@@ -3,7 +3,8 @@ from djoser.serializers import UserSerializer as BaseUserSerializer
 from project.serializers import ProfileSerializer, ScheduleSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from project.models import Student
+from project.models import Student, Schedule
+
 
 User = get_user_model()
 
@@ -18,4 +19,3 @@ class CustomUserSerializer(BaseUserSerializer):
         if profile:
             return ProfileSerializer(profile).data
         return None
-    

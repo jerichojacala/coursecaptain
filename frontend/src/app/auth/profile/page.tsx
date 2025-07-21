@@ -7,9 +7,21 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "@/app/fetcher";
 import {Schedule} from '@/models/scheduleModel';
 import {Registration} from '@/models/registrationModel';
+import { createSchedule} from '@/app/auth/utils';
 
 export default function ProfilePage() {
   const { data: user, error } = useSWR("/auth/users/me/", fetcher);
+
+  const handleAddSchedule = async () => {
+    try {
+      await createSchedule("My Schedule");
+      mutate("/auth/users/me/"); // re-fetch user data to include new schedule
+    } catch (err) {
+      console.error("Failed to add schedule:", err);
+      alert("Error adding schedule.");
+    }
+  };
+
   if (!user){
     return <p>Loading...</p>
   }
@@ -48,6 +60,14 @@ export default function ProfilePage() {
           <p className="text-center">No schedules</p>
         </div>
       )}
+      <div className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
+          <button
+            onClick={handleAddSchedule}
+            className="bg-blue-600 text-white px-4 py-2 rounded h-fit self-start mt-4"
+          >
+            + Add Schedule
+          </button>
+      </div>
     </>
   );
 }
