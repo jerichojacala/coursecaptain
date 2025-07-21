@@ -13,7 +13,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from .serializers import *
 from django.db.models import Q
 
@@ -77,3 +77,10 @@ class CourseDetail(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     lookup_field = 'pk'
+
+class ScheduleCreateView(CreateAPIView):
+    serializer_class = ScheduleSerializer
+    queryset = Schedule.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}

@@ -33,4 +33,5 @@ urlpatterns = [
     path('schools/', views.SchoolList.as_view()),
     path('schools/<int:pk>/', views.SchoolDetail.as_view()),
     path('courses/<int:pk>/', views.CourseDetail.as_view()),
+    path('schedules/create/', views.ScheduleCreateView.as_view()),
 ]
