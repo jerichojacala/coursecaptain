@@ -13,7 +13,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
 from .serializers import *
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
@@ -91,3 +91,12 @@ class ScheduleCreateView(CreateAPIView):
     def perform_create(self, serializer):
         student = get_object_or_404(Student, user=self.request.user)
         serializer.save(student=student)
+
+class ScheduleDeleteView(DestroyAPIView):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only allow users to delete their own schedules
+        return Schedule.objects.filter(student__user=self.request.user)

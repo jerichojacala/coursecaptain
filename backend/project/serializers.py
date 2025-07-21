@@ -78,7 +78,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schedule
-        fields = ['title', 'registrations']
+        fields = ['id','title', 'registrations']
 
     def get_registrations(self, obj):
         registrations_qs = obj.get_registrations()

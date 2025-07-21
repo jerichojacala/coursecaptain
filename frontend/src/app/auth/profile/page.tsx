@@ -7,7 +7,7 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "@/app/fetcher";
 import {Schedule} from '@/models/scheduleModel';
 import {Registration} from '@/models/registrationModel';
-import { createSchedule} from '@/app/auth/utils';
+import {createSchedule, deleteSchedule} from '@/app/auth/utils';
 
 export default function ProfilePage() {
   const { data: user, error } = useSWR("/auth/users/me/", fetcher);
@@ -21,6 +21,17 @@ export default function ProfilePage() {
       alert("Error adding schedule.");
     }
   };
+
+  const handleDeleteSchedule = async (scheduleId: number) => {
+    try {
+      await deleteSchedule(scheduleId);
+      mutate("/auth/users/me/");
+    } catch (err) {
+      console.error("Failed to delete schedule:", err);
+      alert("Error deleting schedule.");
+    }
+  };
+
 
   if (!user){
     return <p>Loading...</p>
@@ -43,18 +54,22 @@ export default function ProfilePage() {
         </div>
       </div>
       {user?.student_profile?.schedules?.length ? (
-        <ul>
-          {user.student_profile.schedules.map((schedule: Schedule) => (
-            <div key={schedule.id} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
+          user.student_profile.schedules.map((schedule: Schedule) => (
+            <div key={`schedule-${schedule.id}`} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
             <h1>{schedule.title}</h1>
-            {schedule.registrations.map((registration: Registration) => (
-              <div key={registration.id}>
+            <button
+              onClick={() => handleDeleteSchedule(schedule.id)}
+              className="bg-red-600 text-white px-4 py-2 rounded h-fit self-start mt-4"
+            >
+              - Delete Schedule
+            </button>
+            {schedule.registrations?.map((registration: Registration) => (
+              <div key={`registration-${registration.id}`}>
                 <p>{registration.course.department} {registration.course.number}</p>
               </div>
             ))}
             </div>
-          ))}
-        </ul>
+          ))
       ) : (
         <div className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
           <p className="text-center">No schedules</p>
