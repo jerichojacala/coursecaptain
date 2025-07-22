@@ -11,7 +11,7 @@ from django.contrib.auth import login
 from typing import Any
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
@@ -111,11 +111,22 @@ class ScheduleUpdateView(UpdateAPIView):
         # Only allow users to delete their own schedules
         return Schedule.objects.filter(student__user=self.request.user)
     
-class RegistrationViewSet(viewsets.ModelViewSet):
+class RegistrationCreateView(CreateAPIView):
     queryset = Registration.objects.all()
     serializer_class = RegistrationSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # restrict schedules to the current user
         return self.queryset.filter(schedule__student__user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        schedule_id = request.data.get("schedule")
+        course_id = request.data.get("course")
+
+        schedule = get_object_or_404(Schedule, id=schedule_id, student__user=request.user)
+        course = get_object_or_404(Course, id=course_id)
+
+        registration = Registration.objects.create(schedule=schedule, course=course)
+
+        serializer = self.get_serializer(registration)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

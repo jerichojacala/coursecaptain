@@ -1,5 +1,6 @@
 import {Schedule} from '@/models/scheduleModel';
 import {Registration} from '@/models/registrationModel';
+import CourseDrawer from '@/components/CourseDrawer';
 import { createSchedule, deleteSchedule } from '@/app/auth/utils';
 import useSWR, { mutate } from "swr";
 
@@ -58,13 +59,16 @@ export default function ScheduleCard({
           ) : (
             <div className="flex gap-2 items-center">
               <h1 className="text-xl font-bold">{schedule.title}</h1>
+              <CourseDrawer
+                scheduleId={schedule.id}
+              />
               <button
                 onClick={() => handleEditClick(schedule.id, schedule.title)}
                 className="bg-orange-500 text-white px-3 py-1 rounded"
               >
                 Edit Title
               </button>
-              <button
+            <button
               onClick={() => handleDeleteSchedule(schedule.id)}
               className="bg-red-500 text-white px-3 py-1 rounded"
             >
@@ -74,7 +78,10 @@ export default function ScheduleCard({
           )}
           {schedule?.registrations?.length ? (
             schedule.registrations.map((registration: Registration) => (
-              <p>Placeholder</p>
+              <div key={`registration-${registration.id}`} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
+                <p className="text-white font-semibold">{registration.course.department} {registration.course.number}</p>
+                  <p className="text-sm text-white-500">{registration.course.professor.first_name} {registration.course.professor.last_name}</p>
+              </div>
             ))
           ) : (
             <div className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">

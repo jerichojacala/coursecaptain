@@ -68,10 +68,19 @@ class CourseSerializer(serializers.ModelSerializer):
         return course_satisfaction
     
 class RegistrationSerializer(serializers.ModelSerializer):
-    course = CourseSerializer()
+    # Accept course and schedule IDs on input
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    schedule = serializers.PrimaryKeyRelatedField(queryset=Schedule.objects.all())
+
+    # Optional: serialize full course info when returning data
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['course'] = CourseSerializer(instance.course).data
+        return ret
+
     class Meta:
         model = Registration
-        fields = ['course']
+        fields = ['id', 'course', 'schedule']
     
 class ScheduleSerializer(serializers.ModelSerializer):
     registrations = serializers.SerializerMethodField()
@@ -82,4 +91,4 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     def get_registrations(self, obj):
         registrations_qs = obj.get_registrations()
-        return registrations_qs
+        return RegistrationSerializer(registrations_qs, many=True).data
