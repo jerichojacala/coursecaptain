@@ -7,11 +7,14 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "@/app/fetcher";
 import {Schedule} from '@/models/scheduleModel';
 import {Registration} from '@/models/registrationModel';
-import {createSchedule, deleteSchedule} from '@/app/auth/utils';
+import {createSchedule, deleteSchedule, updateSchedule} from '@/app/auth/utils';
+import ScheduleCard from '@/components/ScheduleCard';
+
 
 export default function ProfilePage() {
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newTitle, setNewTitle] = useState("");
   const { data: user, error } = useSWR("/auth/users/me/", fetcher);
-
   const handleAddSchedule = async () => {
     try {
       await createSchedule("My Schedule");
@@ -32,6 +35,27 @@ export default function ProfilePage() {
     }
   };
 
+  const handleEditClick = (scheduleId: number, currentTitle: string) => {
+    setEditingId(scheduleId);
+    setNewTitle(currentTitle);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setNewTitle("");
+  };
+
+  const handleSaveTitle = async (scheduleId: number) => {
+    try {
+      // Call your backend API to update the schedule title
+      await updateSchedule(scheduleId, newTitle);  // implement this API
+      mutate("/auth/users/me/"); // refresh user data
+      setEditingId(null);
+    } catch (err) {
+      console.error("Failed to update title:", err);
+      alert("Error updating title.");
+    }
+  };
 
   if (!user){
     return <p>Loading...</p>
@@ -55,20 +79,16 @@ export default function ProfilePage() {
       </div>
       {user?.student_profile?.schedules?.length ? (
           user.student_profile.schedules.map((schedule: Schedule) => (
-            <div key={`schedule-${schedule.id}`} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
-            <h1>{schedule.title}</h1>
-            <button
-              onClick={() => handleDeleteSchedule(schedule.id)}
-              className="bg-red-600 text-white px-4 py-2 rounded h-fit self-start mt-4"
-            >
-              - Delete Schedule
-            </button>
-            {schedule.registrations?.map((registration: Registration) => (
-              <div key={`registration-${registration.id}`}>
-                <p>{registration.course.department} {registration.course.number}</p>
-              </div>
-            ))}
-            </div>
+            <ScheduleCard
+              key={`schedule-${schedule.id}`}
+              schedule={schedule}
+              editingId={editingId}
+              newTitle={newTitle}
+              setNewTitle={setNewTitle}
+              handleSaveTitle={handleSaveTitle}
+              handleCancelEdit={handleCancelEdit}
+              handleEditClick={handleEditClick}
+            />
           ))
       ) : (
         <div className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">

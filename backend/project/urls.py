@@ -35,4 +35,5 @@ urlpatterns = [
     path('courses/<int:pk>/', views.CourseDetail.as_view()),
     path('schedules/create/', views.ScheduleCreateView.as_view()),
     path('schedules/delete/<int:pk>/', views.ScheduleDeleteView.as_view()),
+    path('schedules/update/<int:pk>/', views.ScheduleUpdateView.as_view()),
 ]

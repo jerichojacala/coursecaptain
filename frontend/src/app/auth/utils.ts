@@ -115,6 +115,28 @@ export async function deleteSchedule(scheduleId: number) {
   }
 }
 
+export async function updateSchedule(scheduleId: number, newTitle: string){
+  const accessToken = getToken("access");
+
+  if (!accessToken) {
+    throw new Error("User not authenticated. No access token found.");
+  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules/update/${scheduleId}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // if using JWT
+    },
+    body: JSON.stringify({ title: newTitle }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update schedule");
+  }
+
+  return await res.json();
+}
+
 export const AuthActions = () => {
   return {
     login,
