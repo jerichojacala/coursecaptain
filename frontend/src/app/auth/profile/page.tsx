@@ -25,16 +25,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleDeleteSchedule = async (scheduleId: number) => {
-    try {
-      await deleteSchedule(scheduleId);
-      mutate("/auth/users/me/");
-    } catch (err) {
-      console.error("Failed to delete schedule:", err);
-      alert("Error deleting schedule.");
-    }
-  };
-
   const handleEditClick = (scheduleId: number, currentTitle: string) => {
     setEditingId(scheduleId);
     setNewTitle(currentTitle);
@@ -89,6 +79,7 @@ export default function ProfilePage() {
               handleCancelEdit={handleCancelEdit}
               handleEditClick={handleEditClick}
             />
+            
           ))
       ) : (
         <div className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">

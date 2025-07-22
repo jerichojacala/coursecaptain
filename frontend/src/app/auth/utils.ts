@@ -137,6 +137,30 @@ export async function updateSchedule(scheduleId: number, newTitle: string){
   return await res.json();
 }
 
+export async function createRegistration(scheduleId: number, courseId: number) {
+  const accessToken = getToken("access");
+
+  if (!accessToken) {
+    throw new Error("User not authenticated. No access token found.");
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/registrations/create/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ schedule: scheduleId, course: courseId }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData?.detail || "Schedule creation failed");
+  }
+
+  return res.json();
+}
+
 export const AuthActions = () => {
   return {
     login,
