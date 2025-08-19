@@ -1,5 +1,6 @@
 import CourseDetailView from '@/components/CourseDetail';
+import type { Metadata } from 'next';
 
-export default function CoursePage({ params }: { params: { id: string } }) {
-  return <CourseDetailView id={params.id} />;
+export default function CoursePage(props: any) {
+  return <CourseDetailView id={props.params.id} />;
 }
