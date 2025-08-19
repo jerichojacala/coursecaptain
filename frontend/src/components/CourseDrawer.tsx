@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
-import useSWR from "swr";
+import useSWR, { mutate }from "swr";
 import { fetcher } from "@/app/fetcher";
 import { useDebounce } from 'use-debounce';
 import {Course} from '@/models/courseModel';
 import {createRegistration} from '@/app/auth/utils';
+
 
 export default function CourseDrawer({ scheduleId }: { scheduleId: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,11 @@ export default function CourseDrawer({ scheduleId }: { scheduleId: number }) {
       setResults([]);
     }
   }, [debouncedTerm, searchEndpoint]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    mutate("/auth/users/me/"); // 🔄 force profile page to re-fetch
+  };
 
   return (
     <>
@@ -67,7 +73,7 @@ export default function CourseDrawer({ scheduleId }: { scheduleId: number }) {
               {results.map((course: any) => (
                 <div
                   key={course.id}
-                  className="flex justify-between items-center p-3 border border-gray-200 rounded hover:bg-gray-50"
+                  className="flex justify-between items-center p-3 border border-gray-200 rounded"
                 >
                     <p className="text-white font-semibold">{course.department} {course.number}</p>
                     <p className="text-sm text-white-500">{course.professor.first_name} {course.professor.last_name}</p>
@@ -82,7 +88,7 @@ export default function CourseDrawer({ scheduleId }: { scheduleId: number }) {
             </div>
             <div className="mt-4 text-right">
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleClose()}
                 className="px-3 py-2 border rounded text-gray-700 hover:bg-gray-100"
               >
                 Close

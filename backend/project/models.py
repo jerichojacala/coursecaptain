@@ -204,6 +204,9 @@ class Registration(models.Model):
     course  = models.ForeignKey("Course", on_delete=models.CASCADE)
     schedule  = models.ForeignKey("Schedule", on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ("schedule", "course")  # prevents duplicates at DB level
+
     def __str__(self):
         '''Return the string representation of the registration'''
         return f'{self.course} in {self.schedule}'

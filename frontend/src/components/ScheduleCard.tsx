@@ -1,7 +1,7 @@
 import {Schedule} from '@/models/scheduleModel';
 import {Registration} from '@/models/registrationModel';
 import CourseDrawer from '@/components/CourseDrawer';
-import { createSchedule, deleteSchedule } from '@/app/auth/utils';
+import { deleteSchedule, removeClass } from '@/app/auth/utils';
 import useSWR, { mutate } from "swr";
 
 export default function ScheduleCard({
@@ -31,6 +31,16 @@ export default function ScheduleCard({
       alert("Error deleting schedule.");
     }
   };
+
+  const handleRemoveClass = async (registrationId: number) => {
+    try {
+      await removeClass(registrationId);
+      mutate("/auth/users/me/");
+    } catch (err) {
+      console.error("Failed to remove class:", err);
+      alert("Error removing class.");
+    }
+  }
 
   return (
     <div key={`schedule-${schedule.id}`} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
@@ -81,6 +91,12 @@ export default function ScheduleCard({
               <div key={`registration-${registration.id}`} className="border-2 border-solid border-gray-800 p-8 max-w-6xl mx-auto">
                 <p className="text-white font-semibold">{registration.course.department} {registration.course.number}</p>
                   <p className="text-sm text-white-500">{registration.course.professor.first_name} {registration.course.professor.last_name}</p>
+                  <button
+                    onClick={() => handleRemoveClass(registration.id)}
+                    className="bg-red-600 text-white px-3 py-1 rounded"
+                  >
+                    Remove class
+                  </button>
               </div>
             ))
           ) : (

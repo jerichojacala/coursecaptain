@@ -161,6 +161,27 @@ export async function createRegistration(scheduleId: number, courseId: number) {
   return res.json();
 }
 
+export async function removeClass(registrationId: number) {
+  const accessToken = getToken("access");
+
+  if (!accessToken) {
+    throw new Error("User not authenticated. No access token found.");
+  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/registrations/delete/${registrationId}/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`,
+    },
+    body: "",
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData?.detail || "Schedule creation failed");
+  }
+}
+
 export const AuthActions = () => {
   return {
     login,

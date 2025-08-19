@@ -19,6 +19,7 @@ from .serializers import *
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 
 # Create your views here.
 
@@ -126,7 +127,19 @@ class RegistrationCreateView(CreateAPIView):
         schedule = get_object_or_404(Schedule, id=schedule_id, student__user=request.user)
         course = get_object_or_404(Course, id=course_id)
 
+        if Registration.objects.filter(schedule=schedule, course=course).exists():
+            raise ValidationError({"detail": "This course is already registered for this schedule."})
+
         registration = Registration.objects.create(schedule=schedule, course=course)
 
         serializer = self.get_serializer(registration)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class RegistrationDeleteView(DestroyAPIView):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only allow users to delete their own schedules
+        return Registration.objects.filter(schedule__student__user=self.request.user)

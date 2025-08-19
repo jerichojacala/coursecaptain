@@ -37,4 +37,5 @@ urlpatterns = [
     path('schedules/delete/<int:pk>/', views.ScheduleDeleteView.as_view()),
     path('schedules/update/<int:pk>/', views.ScheduleUpdateView.as_view()),
     path('registrations/create/', views.RegistrationCreateView.as_view()),
+    path('registrations/delete/<int:pk>/', views.RegistrationDeleteView.as_view()),
 ]
