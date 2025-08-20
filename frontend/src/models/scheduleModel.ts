@@ -5,4 +5,6 @@ export type Schedule = {
   student: number;
   title: string;
   registrations: Registration[];
+  schedule_load: number;
+  schedule_satisfaction: number;
 }

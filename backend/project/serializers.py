@@ -84,11 +84,21 @@ class RegistrationSerializer(serializers.ModelSerializer):
     
 class ScheduleSerializer(serializers.ModelSerializer):
     registrations = serializers.SerializerMethodField()
+    schedule_load = serializers.SerializerMethodField()
+    schedule_satisfaction = serializers.SerializerMethodField()
 
     class Meta:
         model = Schedule
-        fields = ['id','title', 'registrations']
+        fields = ['id','title', 'registrations', 'schedule_load', 'schedule_satisfaction']
 
     def get_registrations(self, obj):
         registrations_qs = obj.get_registrations()
         return RegistrationSerializer(registrations_qs, many=True).data
+    
+    def get_schedule_load(self, obj):
+        schedule_load = obj.get_schedule_load()
+        return schedule_load
+
+    def get_schedule_satisfaction(self, obj):
+        schedule_satisfaction = obj.get_schedule_satisfaction()
+        return schedule_satisfaction

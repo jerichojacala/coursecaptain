@@ -82,6 +82,11 @@ class CourseDetail(RetrieveAPIView):
     serializer_class = CourseSerializer
     lookup_field = 'pk'
 
+class ProfessorDetail(RetrieveAPIView):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+    lookup_field = 'pk'
+
 class ScheduleCreateView(CreateAPIView):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()

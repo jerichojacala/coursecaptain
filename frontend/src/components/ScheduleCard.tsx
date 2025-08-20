@@ -84,6 +84,8 @@ export default function ScheduleCard({
             >
               - Delete Schedule
             </button>
+            <h1 className="font-bold">Schedule load: {schedule.schedule_load}</h1>
+            <h1 className="font-bold">Schedule satisfaction: {schedule.schedule_satisfaction}</h1>
             </div>
           )}
           {schedule?.registrations?.length ? (

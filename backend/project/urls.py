@@ -33,6 +33,7 @@ urlpatterns = [
     path('schools/', views.SchoolList.as_view()),
     path('schools/<int:pk>/', views.SchoolDetail.as_view()),
     path('courses/<int:pk>/', views.CourseDetail.as_view()),
+    path('professors/<int:pk>/', views.ProfessorDetail.as_view()),
     path('schedules/create/', views.ScheduleCreateView.as_view()),
     path('schedules/delete/<int:pk>/', views.ScheduleDeleteView.as_view()),
     path('schedules/update/<int:pk>/', views.ScheduleUpdateView.as_view()),
